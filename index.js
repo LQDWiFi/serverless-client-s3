@@ -187,16 +187,37 @@ module.exports = function(S) {
             Version: "2008-10-17",
             Id: "Policy1392681112290",
             Statement: [
+	     {
+                Sid: "Allow gateway redirect",
+                Effect: "Allow",
+                Principal: {
+                  AWS: "*"
+                },
+                Action: "s3:GetObject",
+                Resource: "arn:aws:s3:::" + _this.bucketName + '/gateway.html',
+             },
               {
+                Sid: "Allow valid redirects",
+                Effect: "Deny",
+                Principal: {
+                  AWS: "*"
+                },
+                Action: "s3:GetObject",
+                Resource: "arn:aws:s3:::" + _this.bucketName + '/index.html',
+		Condition: {
+		  "StringNotLike": {"aws:Referer": ["http://lqd-webapp-devnyc.s3-website-us-east-1.amazonaws.com/"]}
+		}
+             },
+	      {
                 Sid: "Stmt1392681101677",
                 Effect: "Allow",
                 Principal: {
                   AWS: "*"
                 },
                 Action: "s3:GetObject",
-                Resource: "arn:aws:s3:::" + _this.bucketName + '/*'
-              }
-            ]
+                Resource: "arn:aws:s3:::" + _this.bucketName + '/*',
+             }
+	    ]
           };
 
           let params = {
@@ -250,9 +271,9 @@ module.exports = function(S) {
           ContentType: mimeType
         };
 
-	 if(mimeType == 'application/octet-stream') {
-          params['WebsiteRedirectLocation'] = '/index.html';
-        }
+	if(mimeType == 'application/octet-stream') {
+	  params['WebsiteRedirectLocation'] = '/index.html';
+	}
         // TODO: remove browser caching
         return _this.aws.request('S3', 'putObject', params, _this.evt.options.stage, _this.evt.options.region)
       });
