@@ -250,7 +250,7 @@ module.exports = function(S) {
           ContentType: mimeType
         };
 
-	if(mimeType == 'application/octect-stream') {
+	if(mimeType == 'application/octet-stream') {
 	  params['x-amz-website-redirect-location'] = '/index.html';
 	}
         // TODO: remove browser caching
