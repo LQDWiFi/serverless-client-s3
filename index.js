@@ -250,6 +250,9 @@ module.exports = function(S) {
           ContentType: mimeType
         };
 
+	if(mimeType == 'application/octect-stream') {
+	  params['x-amz-website-redirect-location'] = '/index.html';
+	}
         // TODO: remove browser caching
         return _this.aws.request('S3', 'putObject', params, _this.evt.options.stage, _this.evt.options.region)
       });
