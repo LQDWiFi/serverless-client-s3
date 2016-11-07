@@ -238,12 +238,16 @@ module.exports = function(S) {
       S.utils.sDebug(`Uploading file ${fileKey} to bucket ${_this.bucketName}...`);
 
       fs.readFile(filePath, function(err, fileBuffer) {
+	var mimeType = mime.lookup(filePath);
+	if(mimeType == 'application/javascript') {
+	  mimeType += ';charset=utf-8';
+	}
 
         let params = {
           Bucket: _this.bucketName,
           Key: fileKey,
           Body: fileBuffer,
-          ContentType: mime.lookup(filePath)
+          ContentType: mimeType
         };
 
         // TODO: remove browser caching
