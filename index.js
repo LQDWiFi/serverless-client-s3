@@ -174,7 +174,7 @@ module.exports = function(S) {
             Bucket: _this.bucketName,
             WebsiteConfiguration: {
               IndexDocument: { Suffix: 'index.html' },
-              ErrorDocument: { Key: 'error.html' }
+              ErrorDocument: { Key: 'index.html' } // custom error redirect to reprompt on invalid password
             }
           };
           return _this.aws.request('S3', 'putBucketWebsite', params, _this.evt.options.stage, _this.evt.options.region)
