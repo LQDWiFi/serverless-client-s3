@@ -205,7 +205,8 @@ module.exports = function(S) {
                 Action: "s3:GetObject",
                 Resource: "arn:aws:s3:::" + _this.bucketName + '/index.html',
 		Condition: {
-		  "StringNotLike": {"aws:Referer": ["http://" + _this.bucketName + ".s3-website-us-east-1.amazonaws.com/"]}
+		  "StringNotLike": {"aws:Referer": ["http://" + _this.bucketName + ".s3-website-us-east-1.amazonaws.com/"]},
+		   "Null":{"aws:Referer": true}
 		}
              },
 	      {
